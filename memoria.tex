@@ -13,6 +13,8 @@
 \usepackage{fancyhdr}
 \usepackage[all]{xy}
 % \usepackage{minted}
+\usepackage{float}
+\usepackage{subfigure}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{cancel}
@@ -116,6 +118,29 @@ Además de la encriptación, SSH también se ocupa de verficar la identidad de l
 
 \section{Comparación con Telnet}
 Tal y como se indica en \cite{sshbiblio}, Telnet nos permite también conectarnos en un ordenador de forma remota, pero tiene un defecto: transmite nuestro nombre de usuario y contraseña en texto plano a través de Internet donde una tercera persona puede interceptarlo. Además, toda la sesión Telnet realizada puede ser leída por cualquiera que la intercepte pues también se transmite en texto plano.
+
+Para hacer un ejemplo práctico, hemos creado dos máquinas virtuales que vamos a comunicar a través del servicio Telnet y SSH. Para comprobar cómo podemos extraer los datos de inicio de sesión, vamos a realizar una escucha usando \textit{Wireshark}, y codificando los paquetes como Telnet. Como se puede ver en la \hyperref[telnet1]{Figura \ref*{telnet1}}, hemos capturado todos los paquetes que se han generado durante el inicio de sesión a través de Telnet. 
+
+Una vez que se tiene esto, entrando en \verb|Analyze > Follow TCP Stream| podemos ver el flujo de caracteres que ha habido durante la comunicación que ha seguido el protocolo de red TCP. Como se ve en \hyperref[telnet2]{Figura \ref*{telnet2}}, en este flujo podemos ver claramente el usuario y contraseña que hemos usado para hacer $login$.
+
+\begin{figure}[H]
+    \centering
+    
+    \mbox {
+        \subfigure[Paquetes capturados para la conexión Telnet.]{
+        \includegraphics[width=0.5\textwidth]{telnet1}
+        \label{telnet1}
+    }
+    \qquad
+    
+    \subfigure[TCP Stream: en el se ve el user y password de la conexión.] {
+        \includegraphics[width=0.51\textwidth]{telnet2}
+        \label{telnet2}
+        }
+    }
+    \caption{Escucha realizada para la conexión Telnet.}
+    \label{telnet}
+\end{figure}
 
 \bibliography{memoria} 
 \bibliographystyle{siam}
