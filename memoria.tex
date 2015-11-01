@@ -26,10 +26,8 @@
             bookmarksopen=false,     % true means only level 1
                                      % are displayed.
             colorlinks=true,
-            linkcolor=webblue]{hyperref}
-\definecolor{webgreen}{rgb}{0, 0.5, 0} % less intense green
-\definecolor{webblue}{rgb}{0, 0, 0.5}  % less intense blue
-\definecolor{webred}{rgb}{0.5, 0, 0}   % less intense red
+            linkcolor=red,
+            citecolor=blue]{hyperref}
 
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % regla horizontal para  el titulo
 
@@ -111,8 +109,10 @@
 \subsubsection*{Resumen}
 \end{center}
 
+\section{¿Qué es SSH?}
+SHH es un protocolo hecho para comunicar dos ordenadores de forma segura. Esto quiere decir que SSH, antes de enviar datos, los encripta y cuando llegan a la máquina destino los desencripta. Así, conseguimos una encriptación transparente para el usuario pero a la vez una comunicación segura entre dos máquinas. SSH funciona con una arquitectura cliente-servidor.
 
-\section{Memoria}
+Además de la encriptación, SSH también se ocupa de verficar la identidad de la persona que se quiere conectar y de garantizar que los datos que se envían llegan correctamente. Si una tercera persona captura los datos y los modifica, SSH lo detecta (\cite{sshbiblio}).
 
 \bibliography{memoria} 
 \bibliographystyle{siam}
