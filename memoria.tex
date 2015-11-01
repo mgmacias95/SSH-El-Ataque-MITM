@@ -114,6 +114,9 @@ SHH es un protocolo hecho para comunicar dos ordenadores de forma segura. Esto q
 
 Además de la encriptación, SSH también se ocupa de verficar la identidad de la persona que se quiere conectar y de garantizar que los datos que se envían llegan correctamente. Si una tercera persona captura los datos y los modifica, SSH lo detecta (\cite{sshbiblio}).
 
+\section{Comparación con Telnet}
+Tal y como se indica en \cite{sshbiblio}, Telnet nos permite también conectarnos en un ordenador de forma remota, pero tiene un defecto: transmite nuestro nombre de usuario y contraseña en texto plano a través de Internet donde una tercera persona puede interceptarlo. Además, toda la sesión Telnet realizada puede ser leída por cualquiera que la intercepte pues también se transmite en texto plano.
+
 \bibliography{memoria} 
 \bibliographystyle{siam}
 
