@@ -142,6 +142,32 @@ Una vez que se tiene esto, entrando en \verb|Analyze > Follow TCP Stream| podemo
     \label{telnet}
 \end{figure}
 
+Como se puede comprobar, en el caso de Telnet, capturar el nombre de usuario y la contraseña para iniciar sesión no es para nada complicado, con lo que queda claro que no ofrece mucha seguridad. Ahora, vamos a comprobar lo que sucede con SSH.
+
+Vamos a acceder a una de las máquinas virtuales a través de SSH, usando usuario y contraseña, mientras realizamos una escucha con \textit{Wireshark}. En la \hyperref[ssh1]{Figura \ref*{ssh1}} podemos ver los paquetes que se han capturado durante el inicio de sesión a través de SSH.
+
+Siguiendo los pasos de \verb|Analyze > Follow TCP Stream|, podemos ver el flujo de datos de TCP, con la diferencia de que lo que nos encontramos es algo muy diferente a lo que nos encontrábamos con Telnet: todos los datos de inicio de sesión están cifrados, como se ve en la \hyperref[ssh2]{Figura \ref*{ssh2}}.
+
+
+\begin{figure}[H]
+    \centering
+    
+    \mbox {
+        \subfigure[Paquetes capturados para la conexión SSH.]{
+        \includegraphics[width=0.5\textwidth]{ssh1}
+        \label{ssh1}
+    }
+    \qquad
+    
+    \subfigure[TCP Stream: en el se cómo todos los datos están cifrados] {
+        \includegraphics[width=0.51\textwidth]{ssh2}
+        \label{ssh2}
+        }
+    }
+    \caption{Escucha realizada para la conexión Telnet.}
+    \label{sshconexion}
+\end{figure}
+
 \bibliography{memoria} 
 \bibliographystyle{siam}
 
