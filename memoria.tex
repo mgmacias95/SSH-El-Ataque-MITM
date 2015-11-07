@@ -168,6 +168,36 @@ Siguiendo los pasos de \verb|Analyze > Follow TCP Stream|, podemos ver el flujo 
     \label{sshconexion}
 \end{figure}
 
+\section{Vulnerabilidad de SSH: ataques \textit{Man-in-the-middle}}
+\subsection{Introducción}
+Como se explica en \cite{sshbiblio}, la primera vez que nos conectamos a un servidor SSH, SSH nos alerta con un mensaje como el que se ve en la \hyperref[sshprimeravez]{Figura \ref*{sshprimeravez}}. Ahora bien, ¿cuál es el significado de dicho mensaje? Dicho mensaje significa que el servidor al que nos estamos conectando no está en nuestra lista de \textit{known hosts}. 
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{primeravezssh}
+    \caption{Mensaje obtenido al conectarnos a un servidor SSH por primera vez}
+    \label{sshprimeravez}
+\end{figure}
+
+Si escribimos \textit{yes} y pulsamos enter, automáticamente añadirá dicho servidor a nuestra lista de \textit{known hosts} y nos mostrará el mensaje de la \hyperref[knownhost]{Figura \ref*{knownhost}}. Si volvemos a conectarnos a dicho servidor ya no nos vuelve a preguntar.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{knownhosts}
+    \caption{Mensaje obtenido al seleccionar la opción \textit{yes}}
+    \label{knownhost}
+\end{figure}
+
+Esto se debe, según \cite{valenciano}, a que en el archivo de configuración del cliente SSH (\textit{/etc/ssh/ssh\_config}) tenemos el parámetro \textbf{StrictHostKeyChecking} con el valor \textbf{ask} (el valor por defecto). 
+
+\subsection{Qué es el ataque \textit{Man-in-the-middle}}
+
+\textit{Man-in-the-middle} es un tipo de ataque capaz de interceptar datos y contraseñas en redes seguras. El método que utiliza para interceptar este tipo de datos es actuar como puente, al igual que se haría en una red tipo P2P, entre la conexión del cliente y el servidor, tal y como se dice en \cite{mitmdef}, haciendo creer a los dos que en realidad están conectados directamente en una conexión privada.
+
+Su funcionamiento, de forma muy básica, consiste en que nuestro cliente le pide al servidor su clave pública ($rsa$), y este responde con ella. El atacante le envía un mensaje ``falsificado'' al cliente con la información procedente del servidor haciéndole creer que le llega desde este último. Entonces, el cliente encripta el mensaje y se lo devuelve a lo que cree que es el servidor. Con esto, el atacante consigue las claves necesarias para acceder con los datos del cliente al servidor.
+
+% Según se explica en \cite{mitmdef}, el atacante se queda en medio de una comunicación, haciendo creer a cada una de las partes que están comunicandose directamente en una conexión privada.
+
 \bibliography{memoria} 
 \bibliographystyle{siam}
 
