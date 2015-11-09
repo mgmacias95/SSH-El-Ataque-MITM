@@ -205,7 +205,7 @@ Su funcionamiento, de forma muy básica, consiste en que nuestro cliente le pide
 % Según se explica en \cite{mitmdef}, el atacante se queda en medio de una comunicación, haciendo creer a cada una de las partes que están comunicandose directamente en una conexión privada.
 
 \subsection{¿Cómo afecta \textit{Man-in-the-middle} a SSH?}
-Tal y como se explica en \cite{valenciano}, el ataque \textit{Man-in-the-middle} se puede dar en SSH en esa primera conexión descrita en la \hyperref[intro]{Seción \ref*{intro} (Introducción)}, ya que es cuando SSH se conecta a un servidor sin comprobar su identidad. 
+Tal y como se explica en \cite{valenciano}, el ataque \textit{Man-in-the-middle} se puede dar en SSH en esa primera conexión descrita en la \hyperref[intro]{Seción \ref*{intro} (Introducción)}, porque es cuando SSH se conecta a un servidor sin comprobar su identidad, ya que no conocemos si el servidor al que vamos a realizar la conexión y pedir la clave, es de confianza o no, pudiendo realizar la conexión a la máquina atacante, que filtre las peticiones y capturando las claves públicas, entre otros datos de valor. 
 
 En cambio, una vez guardada la clave pública de una máquina en el archivo de \textit{known hosts}, aunque alguien consiguiera asignar la IP de dicha máquina a otra, SSH detectaría que no es la misma máquina y el ataque \textit{Man-in-the-middle} quedaría bloqueado.
 
