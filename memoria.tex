@@ -170,6 +170,7 @@ Siguiendo los pasos de \verb|Analyze > Follow TCP Stream|, podemos ver el flujo 
 
 \section{Vulnerabilidad de SSH: ataques \textit{Man-in-the-middle}}
 \subsection{Introducción}
+\label{intro}
 Como se explica en \cite{sshbiblio}, la primera vez que nos conectamos a un servidor SSH, SSH nos alerta con un mensaje como el que se ve en la \hyperref[sshprimeravez]{Figura \ref*{sshprimeravez}}. Ahora bien, ¿cuál es el significado de dicho mensaje? Dicho mensaje significa que el servidor al que nos estamos conectando no está en nuestra lista de \textit{known hosts}. 
 
 \begin{figure}[!h]
@@ -197,6 +198,11 @@ Esto se debe, según \cite{valenciano}, a que en el archivo de configuración de
 Su funcionamiento, de forma muy básica, consiste en que nuestro cliente le pide al servidor su clave pública ($rsa$), y este responde con ella. El atacante le envía un mensaje ``falsificado'' al cliente con la información procedente del servidor haciéndole creer que le llega desde este último. Entonces, el cliente encripta el mensaje y se lo devuelve a lo que cree que es el servidor. Con esto, el atacante consigue las claves necesarias para acceder con los datos del cliente al servidor.
 
 % Según se explica en \cite{mitmdef}, el atacante se queda en medio de una comunicación, haciendo creer a cada una de las partes que están comunicandose directamente en una conexión privada.
+
+\subsection{¿Cómo afecta \textit{Man-in-the-middle} a SSH?}
+Tal y como se explica en \cite{valenciano}, el ataque \textit{Man-in-the-middle} se puede dar en SSH en esa primera conexión descrita en la \hyperref[intro]{Seción \ref*{intro} (Introducción)}, ya que es cuando SSH se conecta a un servidor sin comprobar su identidad. 
+
+En cambio, una vez guardada la clave pública de una máquina en el archivo de \textit{known hosts}, aunque alguien consiguiera asignar la IP de dicha máquina a otra, SSH detectaría que no es la misma máquina y el ataque \textit{Man-in-the-middle} quedaría bloqueado.
 
 \bibliography{memoria} 
 \bibliographystyle{siam}
