@@ -113,7 +113,9 @@
 {\large \textit{Universidad de Granada}}
 \begin{center}
 \subsubsection*{Resumen}
-{\small SSH presume de ser un protocolo para la comunicación entre dos máquinas seguro, ya que encripta todo lo que se envía a la otra máquina. Sin embargo, tiene un punto débil: el ataque conocido como \textit{Man-in-the-middle}. En este trabajo se estudia a fondo en qué consiste dicho ataque, cómo afecta a SSH y cómo evitarlo.}
+\begin{minipage}
+{\small SSH presume de ser un protocolo para la comunicación entre dos máquinas seguro, ya que encripta todo lo que se envía a la otra máquina. Sin embargo, tiene un punto débil: el ataque conocido como \texttt{Man-in-the-middle}. En este trabajo se estudia a fondo en qué consiste dicho ataque, cómo afecta a SSH y cómo evitarlo.}
+\end{minipage}
 \end{center}
 
 \section{¿Qué es SSH?}
@@ -172,6 +174,8 @@ Siguiendo los pasos de \verb|Analyze > Follow TCP Stream|, podemos ver el flujo 
     \caption{Escucha realizada para la conexión SSH.}
     \label{sshconexion}
 \end{figure}
+
+% Introducir una explicación del intercambio de claves en ssh
 
 \section{Vulnerabilidad de SSH: ataques \textit{Man-in-the-middle}}
 \subsection{Introducción}
