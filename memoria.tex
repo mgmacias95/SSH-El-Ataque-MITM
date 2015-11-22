@@ -12,7 +12,7 @@
 \usepackage{multirow}
 \usepackage{fancyhdr}
 \usepackage[all]{xy}
-% \usepackage{minted}
+\usepackage{minted}
 \usepackage{float}
 \usepackage{subfigure}
 \usepackage{tikz}
@@ -107,13 +107,13 @@
 \begin{document}
 
 \begin{center}
-{\Huge SSH: El ataque \textit{Man-in-the-middle}}\\[0.35cm]
+{\Huge SSH: El ataque \textit{Man-in-the-middle}}\\[0.5cm]
 \end{center}
 {\large Ingeniería de Servidores}\\[0.5cm]
 {\large \textit{Universidad de Granada}}
 \begin{center}
 \subsubsection*{Resumen}
-{\small SSH presume de ser un protocolo para la comunicación entre dos máquinas seguro, ya que encripta todo lo que se envía a la otra máquina. Sin embargo, tiene un punto débil: el ataque conocido como \textit{Man-in-the-middle}. En este trabajo se estudia a fondo en qué consiste dicho ataque, cómo afecta a SSH y cómo evitarlo.}
+{\small SSH presume de ser un protocolo para la comunicación entre dos máquinas seguro, ya que encripta todo lo que se envía a la otra máquina. Sin embargo, tiene un punto débil: el ataque conocido como \textit{Man-in-the-middle}. En este trabajo se estudia a fondo en qué consiste dicho ataque, cómo afecta a SSH y cómo evitarlo. Además, también se reproducirá un ataque \textit{Man-in-the-middle} en máquinas virtuales para poder obtener las credenciales de acceso a un servidor de un usuario.}
 \end{center}
 
 \section{¿Qué es SSH?}
@@ -173,6 +173,7 @@ Siguiendo los pasos de \verb|Analyze > Follow TCP Stream|, podemos ver el flujo 
     \label{sshconexion}
 \end{figure}
 
+\newpage
 \section{Vulnerabilidad de SSH: ataques \textit{Man-in-the-middle}}
 \subsection{Introducción}
 \label{intro}
@@ -208,6 +209,24 @@ Su funcionamiento, de forma muy básica, consiste en que nuestro cliente le pide
 Tal y como se explica en \cite{valenciano}, el ataque \textit{Man-in-the-middle} se puede dar en SSH en esa primera conexión descrita en la \hyperref[intro]{Seción \ref*{intro} (Introducción)}, porque es cuando SSH se conecta a un servidor sin comprobar su identidad, ya que no conocemos si el servidor al que vamos a realizar la conexión y pedir la clave, es de confianza o no, pudiendo realizar la conexión a la máquina atacante, que filtre las peticiones y capturando las claves públicas, entre otros datos de valor. 
 
 En cambio, una vez guardada la clave pública de una máquina en el archivo de \textit{known hosts}, aunque alguien consiguiera asignar la IP de dicha máquina a otra, SSH detectaría que no es la misma máquina y el ataque \textit{Man-in-the-middle} quedaría bloqueado.
+
+\subsection{¿Cómo evitar un ataque \textit{Man-in-the-middle} en SSH?}
+Tal y como se explicó en la sección \hyperref[intro]{Seción \ref*{intro} (Introducción)}, el parámetro \textbf{StrictHostKeyChecking} tiene por defecto el valor \textbf{ask}. Sin embargo, lo que no se especificó en dicha sección es que además de ese valor también puede tomar los valores \textbf{yes} y \textbf{no}. Tal y como se explica en \cite{valenciano}, si tenemos configurado el valor \textbf{no} SSH no se conectará con ningún servidor SSH que no figure en su lista de \textit{known host}, en cambio, si tenemos configurado el valor \textbf{yes} hará todo lo contrario: se conectará a cualquier servidor sin preguntar.
+
+Con dicho parámetro establecido al valor \textbf{ask}, cada vez que nos conectemos a un servidor que no figure en la lista de \textit{known hosts} SSH nos mostará su \textit{fingerprint}, ésto es su identificador (\hyperref[fingerprint]{Figura \ref*{fingerprint}}). 
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{fingerprint}
+    \caption{\textit{fingerprint} del servidor al que nos estamos conectando}
+    \label{fingerprint}
+\end{figure}
+
+Nuestro trabajo ahora sería, según \cite{valenciano}, comparar dicho identificador con el identificador que nos han debido de dar al proporcionarnos nuestro usuario y contraseña, pero ¿y si es un servidor SSH administrado por nosotros? ¿cómo podemos saber su \textit{fingerprint} entonces? Según \cite{sshd}, el parámetro \textbf{HostKey} del fichero \textit{/etc/ssh/sshd\_config} contiene la ruta de los ficheros que contienen las claves públicas y privadas de nuestro servidor. Para ver su valor debemos ejecutar el siguiente comando:
+
+\begin{minted}[frame=single, label={Obteniendo el \textit{fingerprint} de nuestro servidor}]{bash}
+sudo ssh-keygen -lf /etc/ssh/ssh_host_rsa_key
+\end{minted}
 
 \bibliography{memoria} 
 \bibliographystyle{siam}
