@@ -229,11 +229,43 @@ Con dicho parámetro establecido al valor \textbf{ask}, cada vez que nos conecte
     \label{fingerprint}
 \end{figure}
 
-Nuestro trabajo ahora sería, según \cite{valenciano}, comparar dicho identificador con el identificador que nos han debido de dar al proporcionarnos nuestro usuario y contraseña, pero ¿y si es un servidor SSH administrado por nosotros? ¿cómo podemos saber su \textit{fingerprint} entonces? Según \cite{sshd}, el parámetro \textbf{HostKey} del fichero \textit{/etc/ssh/sshd\_config} contiene la ruta de los ficheros que contienen las claves públicas y privadas de nuestro servidor. Para ver su valor debemos ejecutar el siguiente comando:
+Nuestro trabajo ahora sería, según \cite{valenciano}, comparar dicho identificador con el identificador que nos han debido de dar al proporcionarnos nuestro usuario y contraseña, pero ¿y si es un servidor SSH administrado por nosotros? ¿cómo podemos saber su \textit{fingerprint} entonces? Según \cite{sshd}, el parámetro \textbf{HostKey} del fichero \textit{/etc/ssh/sshd\_config} contiene la ruta de los ficheros que contienen las claves públicas y privadas de nuestro servidor. Para ver su valor, según la sección \textit{Verifying Host Keys} de \cite{manssh}, debemos ejecutar el siguiente comando:
 
 \begin{minted}[frame=single, label={Obteniendo el \textit{fingerprint} de nuestro servidor}]{bash}
-sudo ssh-keygen -lf /etc/ssh/ssh_host_rsa_key
+sudo ssh-keygen -lf /etc/ssh/ssh_host_ecdsa_key
 \end{minted}
+
+Así, tal y como se ve en la \hyperref[clave]{Figura \ref*{clave}} obtenemos el mismo identificador que el servidor nos muestra al conectarnos por primera vez (\hyperref[fingerprint]{Figura \ref*{fingerprint}}).
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{clave}
+    \caption{Obteniendo el \textit{fingerprint} de nuestro servidor}
+    \label{clave}
+\end{figure}
+
+Ahora bien, comparar carácter a carácter puede ser algo tedioso por lo que podemos hacerlo de un modo algo más gráfico asignando el valor \textbf{yes} al parámetro \textbf{VisualHostKey} del fichero \textit{/etc/ssh/ssh\_config} de nuestro cliente SSH. Así, al conectarnos a un servidor SSH por primera vez veremos el ``dibujo'' de la \hyperref[visualhostkey]{Figura \ref*{visualhostkey}}.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{visualhostkey}
+    \caption{Mensaje que obtenemos al conectarnos por primera vez a un determinado servidor SSH con el parámetro \textbf{VisualHostKey} activado}
+    \label{visualhostkey}
+\end{figure}
+
+Para obtener el ``dibujo'' que genera nuestro servidor ejecutamos el siguiente comando:
+\begin{minted}[frame=single, label={Obteniendo el ``dibujo'' de nuestro servidor}]{bash}
+sudo ssh-keygen -lvf /etc/ssh/ssh_host_ecdsa_key
+\end{minted}
+
+Al ejecutar dicho comando obtendremos el output de la \hyperref[visualhostkey1]{Figura \ref*{visualhostkey1}}, que coincide con el obtenido al intentar conectarnos por primera vez en la \hyperref[visualhostkey]{Figura \ref*{visualhostkey}}.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{comprobacion_visualkey}
+    \caption{Obteniendo el ``dibujo'' generado por nuestro servidor.}
+    \label{visualhostkey1}
+\end{figure}
 
 \bibliography{memoria} 
 \bibliographystyle{siam}
