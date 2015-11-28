@@ -105,6 +105,7 @@
 \title{\Huge SSH: El ataque \textit{Man-in-the-middle}}
 
 \begin{document}
+\renewcommand{\tablename}{Tabla}
 
 \begin{center}
 {\Huge SSH: El ataque \textit{Man-in-the-middle}}\\[0.5cm]
@@ -113,9 +114,7 @@
 {\large \textit{Universidad de Granada}}
 \begin{center}
 \subsubsection*{Resumen}
-% % <<<<<<< HEAD
 % {\small SSH presume de ser un protocolo para la comunicación entre dos máquinas seguro, ya que encripta todo lo que se envía a la otra máquina. Sin embargo, tiene un punto débil: el ataque conocido como \textit{Man-in-the-middle}. En este trabajo se estudia a fondo en qué consiste dicho ataque, cómo afecta a SSH y cómo evitarlo. Además, también se reproducirá un ataque \textit{Man-in-the-middle} en máquinas virtuales para poder obtener las credenciales de acceso a un servidor de un usuario.}
-% % =======
 \begin{minipage}{0.7\textwidth}
 {\small SSH presume de ser un protocolo para la comunicación entre dos máquinas seguro, ya que encripta todo lo que se envía a la otra máquina. Sin embargo, tiene un punto débil: el ataque conocido como \textit{Man-in-the-middle}. En este trabajo se estudia a fondo en qué consiste dicho ataque, cómo afecta a SSH y cómo evitarlo. Además, también se reproducirá un ataque \textit{Man-in-the-middle} en máquinas virtuales para poder obtener las credenciales de acceso a un servidor de un usuario.}
 \end{minipage}
@@ -267,13 +266,86 @@ Al ejecutar dicho comando obtendremos el output de la \hyperref[visualhostkey1]{
     \label{visualhostkey1}
 \end{figure}
 
-\subsection{El ataque a la primera conexión}
+% <<<<<<< HEAD
+% \subsection{El ataque a la primera conexión}
 
-A lo largo de su existencia, han existido dos versiones diferentes para el protocolo SSH, \textbf{SSH-1} y \textbf{SSH-2}. SSH-1 fue la primera versión que existió del protocolo, que salió cuando era un proyecto de software y código libre, que empezó a coger popularidad y que la comunidad empezó a desarrollar muy rápidamente. Esto trajo dos cosas principalmente: el desarrollo del protocolo fue muy rápido y salieron a la luz muchas vulnerabilidades y limitaciones de las que disponía el protocolo.
+% A lo largo de su existencia, han existido dos versiones diferentes para el protocolo SSH, \textbf{SSH-1} y \textbf{SSH-2}. SSH-1 fue la primera versión que existió del protocolo, que salió cuando era un proyecto de software y código libre, que empezó a coger popularidad y que la comunidad empezó a desarrollar muy rápidamente. Esto trajo dos cosas principalmente: el desarrollo del protocolo fue muy rápido y salieron a la luz muchas vulnerabilidades y limitaciones de las que disponía el protocolo.
 
-A raíz de esto, para corregir estas vulnerabilidades, se lanzó una nueva versión del protocolo, conocida como SSH 2.0 o SSH-2, que corregía estos fallos y limitaciones del protocolo, pero que no era compatible con la versión anterior.
+% A raíz de esto, para corregir estas vulnerabilidades, se lanzó una nueva versión del protocolo, conocida como SSH 2.0 o SSH-2, que corregía estos fallos y limitaciones del protocolo, pero que no era compatible con la versión anterior.
 
-Actualmente, se recomiendo usar sólamente la versión de $SSH-2$ al ser más segura que su versión anterior, estancada en la $SSH-1.51$. Aun así, hay servidores SSH que disponen de la versión 1.99, 
+% Actualmente, se recomiendo usar sólamente la versión de $SSH-2$ al ser más segura que su versión anterior, estancada en la $SSH-1.51$. Aun así, hay servidores SSH que disponen de la versión 1.99, 
+% =======
+\subsection{Realizando un ataque \textit{Man-in-the-middle}}
+\subsubsection{Preparando el ataque}
+Para relizar el ataque necesitaremos tres máquinas: una \textbf{víctima} que se conectará a un \textbf{servidor} SSH y un \textbf{atacante} que interceptará la comunicación entre ambas.
+
+\begin{description}
+    \item[Víctima]: para la víctima, hemos usado una máquina con la versión 12.04 LTS de Ubuntu instalada, con un cliente ssh instalado.
+    \item[Atacante]: para el atacante, hemos usado una máquina con la versión 12.04 LTS de Ubuntu instalada, con el paquete de aplicaciones \texttt{dsniff} instalado (en concreto \texttt{arpspoof}, \texttt{dnsspoof} y \texttt{sshmitm}) y con el \textbf{IP Forwarding} activado, así, como se indica en \cite{barcelona}, conseguiremos configurar nuestra máquina atacante como un router y podremos redirigir todo el tráfico de las máquinas víctima y servidor hacia nuestra máquina. Para ello, según \cite{enableipf}, ejecutamos el siguiente comando:
+
+\begin{minted}[frame=single, label={Activando el IP forwarding}]{console}
+# echo 1 > /proc/sys/net/ipv4/ip_forward
+\end{minted}
+
+    \item[Servidor]: para el servidor, hemos usado una máquina con la versión 4.10 ``Warty Warthog'' de Ubuntu instalada y con un servidor OpenSSH compatible con la versión 1 del protocolo, en nuestro caso, la versión 3.8. Para poder usar la versión 1 de SSH, debemos configurar previamente el servidor. Para ello seguimos los siguientes pasos:
+    \begin{enumerate}[1.]
+        \item Modificamos los siguientes parámetros del archivo \textbf{/etc/ssh/sshd\_config} (\cite{sshd}):
+        \begin{enumerate}[$\bullet$]
+            \item El parámetro \textbf{Protocol} debe tener el valor \textbf{1,2} para dar más preferencia al protocolo 1.
+            \item Debemos añadir un parámetro extra \textbf{HostKey} con el valor \textbf{/etc/ssh/ssh\_host\_key}, ya que la versión 1 de SSH esa ese fichero para autenticarse. Más adelante crearemos con \texttt{ssh-keygen} un par de claves para dicho fichero.
+            \item El parámetro \textbf{PasswordAuthentication} debe tener el valor \textbf{yes}, para permitir que los usuarios se identifiquen con una contraseña.
+        \end{enumerate}
+        \item Creamos un par de claves para la versión 1 de nuestro servidor SSH. Para ello, ejecutamos
+    \end{enumerate}
+\end{description}
+
+Para hacer el ataque, usaremos el protocolo 1 de SSH. Atacaremos la conexión con las herramientas \texttt{dsniff} y \texttt{sshmitm}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|}
+    \hline
+    Máquina & Dirección IP \\
+    \hline
+    Víctima & 10.0.2.6 \\
+    \hline
+    Atacante & 10.0.2.5 \\
+    \hline
+    Gateaway & 10.0.2.1 \\
+    \hline
+    Servidor & 10.0.2.12 \\
+    \hline
+    \end{tabular}
+    \caption{Máquinas implicadas en el ataque}
+    \label{maquinas}
+\end{table}
+
+\subsection{Cómo realizar el ataque}
+
+Para realizar un ataque satisfactorio y comprometer la seguridad del protocolo SSH al realizar la primera conexión, tenemos que hacer creer a la víctima y al servidor que su $Gateaway$ es en realidad nuestra máquina atacante (\hyperref[conec2]{Figura \ref*{conec2}}) y no el que lo conecta directamente con el servidor (\hyperref[conec1]{Figura \ref*{conec1}}). Es decir, que todo el flujo de datos que hay entre ellos durante la comunicación, pase a través de nuestra máquina, para ser capaz de realizar la escucha y extracción de datos.
+
+% \begin{figure}[H]
+%     \centering
+    
+%     \mbox {
+%         \subfigure[Conexión ``normal'' del cliente a través del Gateway con el servidor.]{
+%         \includegraphics[width=0.5\textwidth]{ssh1}
+%         \label{conec1}
+%     }
+%     \qquad
+    
+%     \subfigure[Conexión redirigida por el atacante.] {
+%         \includegraphics[width=0.51\textwidth]{ssh2}
+%         \label{conec2}
+%         }
+%     }
+%     \caption{Conexiones antes del ataque y durante el ataque MITM.}
+%     \label{conexiones}
+% \end{figure}
+
+
+
+% >>>>>>> 2129cfaf20da4cd51806475f3a51a72327668239
 
 \bibliography{memoria} 
 \bibliographystyle{siam}
