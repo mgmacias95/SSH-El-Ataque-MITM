@@ -286,7 +286,14 @@ Para relizar el ataque necesitaremos tres máquinas: una \textbf{víctima} que s
             \item Debemos añadir un parámetro extra \textbf{HostKey} con el valor \textbf{/etc/ssh/ssh\_host\_key}, ya que la versión 1 de SSH esa ese fichero para autenticarse. Más adelante crearemos con \texttt{ssh-keygen} un par de claves para dicho fichero.
             \item El parámetro \textbf{PasswordAuthentication} debe tener el valor \textbf{yes}, para permitir que los usuarios se identifiquen con una contraseña.
         \end{enumerate}
-        \item Creamos un par de claves para la versión 1 de nuestro servidor SSH. Para ello, ejecutamos
+        \item Creamos un par de claves para la versión 1 de nuestro servidor SSH. Para ello, ejecutamos \texttt{ssh-keygen} con los parámetros \texttt{-t} para especificar el tipo de clave que deseamos (en este caso, \textbf{rsa1}) y \texttt{-f} para especificar el fichero en el que se guardarán las claves generadas (\cite{sshkeygen}):
+\begin{minted}[frame=single, label={Creando un par de claves para SSH1}]{console}
+# ssh-keygen -t rsa1 -f /etc/ssh/ssh_host_hey
+\end{minted}
+        \item Reiniciamos el servicio SSH:
+\begin{minted}[frame=single, label={Reiniciando el servicio SSH en Ubuntu 4.10}]{console}
+# /etc/init.d/ssh restart
+\end{minted}
     \end{enumerate}
 \end{description}
 
