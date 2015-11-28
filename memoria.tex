@@ -267,6 +267,14 @@ Al ejecutar dicho comando obtendremos el output de la \hyperref[visualhostkey1]{
     \label{visualhostkey1}
 \end{figure}
 
+\subsection{El ataque a la primera conexión}
+
+A lo largo de su existencia, han existido dos versiones diferentes para el protocolo SSH, \textbf{SSH-1} y \textbf{SSH-2}. SSH-1 fue la primera versión que existió del protocolo, que salió cuando era un proyecto de software y código libre, que empezó a coger popularidad y que la comunidad empezó a desarrollar muy rápidamente. Esto trajo dos cosas principalmente: el desarrollo del protocolo fue muy rápido y salieron a la luz muchas vulnerabilidades y limitaciones de las que disponía el protocolo.
+
+A raíz de esto, para corregir estas vulnerabilidades, se lanzó una nueva versión del protocolo, conocida como SSH 2.0 o SSH-2, que corregía estos fallos y limitaciones del protocolo, pero que no era compatible con la versión anterior.
+
+Actualmente, se recomiendo usar sólamente la versión de $SSH-2$ al ser más segura que su versión anterior, estancada en la $SSH-1.51$. Aun así, hay servidores SSH que disponen de la versión 1.99, 
+
 \bibliography{memoria} 
 \bibliographystyle{siam}
 
