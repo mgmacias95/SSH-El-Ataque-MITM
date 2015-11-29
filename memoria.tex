@@ -402,7 +402,20 @@ Para atacar a nuestra víctima, tenemos que realizar los siguientes pasos:
 
     \end{enumerate}
     
-    \item El siguiente paso es escuchar el tráfico que genere el protocolo SSH para obtener el usuario y contraseña de inicio de sesión de la máquina de la víctima. Para ello haremos uso de la herramienta \texttt{sshmitm}, capaz de realizar esto. Esta herramienta, como podemos ver en \cite{sshmitm}, dispone de la opción $-I$, que nos sirve para, aparte de realizar 
+    \item El siguiente paso es escuchar el tráfico que genere el protocolo SSH para obtener el usuario y contraseña de inicio de sesión de la máquina de la víctima. Para ello haremos uso de la herramienta \texttt{sshmitm}, capaz de realizar esto. Esta herramienta, como podemos ver en \cite{sshmitm}, dispone de la opción $-I$, que nos sirve para, aparte de realizar la escucha de la sesión ssh, nos permite conectarnos de forma interactiva y obtener datos sensibles.
+
+    La ejecución de esta orden sin la opción $-I$, la podemos ver en la \hyperref[ataque4]{Figura \ref*{ataque4}}.
+
+    \begin{figure}[!h]
+        \centering
+        \includegraphics[width=0.75\textwidth]{ataque4}
+        \caption{Salida tras ejecutar la orden \texttt{sshmitm}.}
+        \label{ataque4}
+    \end{figure}
+
+    Una vez hecho esto, ya estamos preparados para atacar a la víctima.
+
+    \item Cuando la víctima realice la conexión SSH usando el protocolo 1, obtendrá una salida por pantalla como la que se muestra en la \hyperref[ataque5]{Figura \ref*{ataque5}}. Al ser la primera conexión, 
 
 \end{enumerate}
 
