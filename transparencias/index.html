@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>SSH: El ataque Man-In-The-Middle</title>
+
+		<meta name="description" content="Diapositivas sobre el trabajo 'SSH: el ataque Man-In-The-Middle' hechas por Marta Gómez y Braulio Vargas">
+		<meta name="author" content="Marta Gómez y Braulio Vargas">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>SSH</h1>
+					<h3>El ataque <it>Man-In-The-Middle</it></h3>
+					<p>
+						<small>Hecho por Marta Gómez Macías y Braulio Vargas López</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>¿Qué es SSH?</h2>
+					<p>
+						SSH es un protocolo para comunicar dos ordenadores de forma segura porque envía todos los datos encriptados a través de la red. Así, si alguien intercepta nuestra comunicación no podrá hacer nada con ella.
+					</p>
+				</section>
+				<section>
+					<h2>Comparación con <strong>Telnet</strong></h2>
+					<p>Telnet nos ofrece una funcionalidad muy parecida a SSH, pero, ¿cuál es la diferencia?</p>
+				</section>
+				<section>
+					<h2>Seguridad</h2>
+					<p>A diferencia de SSH, Telnet envía toda la comunicación en texto plano a través de la red.</p>
+					<p>Si alguien consigue interceptar nuestra comunicación podrá obtener nuestra contraseña de acceso al servidor.</p>
+				</section>
+				<section>
+					<img src="../telnet1.png">
+				</section>
+				<section>
+					<img src="../telnet2.png">
+				</section>
+				<section>
+					<p>Como se ve, hemos conseguido interceptar toda la comunicación Telnet, incluídos el usuario y contraseña de acceso.</p>
+				</section>
+				<section>
+					<p>En cambio, en SSH, si conseguimos interceptar la comunicación, veremos texto encriptado, por lo que no podremos obtener ninguna información.</p>
+					<p>Sin embargo, nada es perfecto...</p>
+				</section>
+				<section>
+					<img src="../ssh2.png"/>
+				</section>
+				<section>
+					<h2>Vunerabilidad de SSH: la primera conexión.</h2>
+					<p>
+						Al conectarnos por primera vez en SSH, recibimos una alerta mostrándonos el siguiente mensaje:
+					</p>
+					<img src="../primeravezssh.png"/>
+					<p>Dicho mensaje significa que SSH no conoce el servidor al que nos estamos conectando, y nos pregunta a nosotros si queremos permitir la conexión. En caso de decir que sí veremos el siguiente mensaje:</p>
+					<img src="../knownhosts.png"/>
+				</section>
+				<section>
+				<p>
+					<h2>¿Qué es Man-In-The-Middle?</h2>
+					Es un ataque a través del cual conseguimos que el emisor de la comunicación nos envíe a nosotros todas las peticiones pensando que las está enviando al servidor. Nosotros después reenviamos dichas peticiones al servidor, haciendo de intermediario entre ambos.
+				</p>
+				<p>
+					En la primera conexión SSH, no se comprueba el servidor al que se está realizando la conexión, por lo que podríamos, por error, conectarnos al servidor equivocado. Esta vulnerabilidad es aprovechada por este ataque.
+				</p>
+				</section>
+				<section>
+					<h2>¿Cómo evitarlo?</h2>
+					<p>Podemos evitar conectarnos al servidor que no debemos comprobando su fingerprint.</p>
+					<img src="../fingerprint.png"/>
+					<p>Podemos comprobarlo de forma más visual activando el parámetro VisualHostKey en nuestro cliente</p>
+					<img src="../visualhostkey.png"/>
+				</section>
+				<section>
+					<h2>¿Y cuál es el fingerprint de mi servidor SSH?</h2>
+					<p>
+						Podemos encontrar el fingerprint usando el siguiente comando:
+<pre><code data-trim>
+# ssh-keygen -lf /etc/ssh/ssh_host_ecdsa_key
+</code></pre>
+					</p>
+
+					<p>
+						Para obtener la VisualKey usamos el siguiente comando:
+<pre><code data-trim>
+# ssh-keygen -lvf /etc/ssh/ssh_host_ecdsa_key
+</code></pre>
+					</p>
+				</section>
+				<section>
+					<h2>Realizando un ataque Man-In-The-Middle</h2>
+					<p>
+						En esta prueba tendremos tres máquinas: una máquina atacante, una máquina cliente y una máquina servidor. Además, usaremos un servidor SSH compatible con la versión 1 del protocolo. 
+					</p>
+					<p>
+						Usaremos tres herramientas para ello:
+						<ul>
+							<li class="fragment">arpspoof</li>
+							<li class="fragment">dnsspoof</li>
+							<li class="fragment">sshmitm</li>
+						</ul>
+					</p>
+				</section>
+				<section>
+					<p>
+						La idea es convertir nuestra máquina atacante en un router por donde pasará todo el tráfico de la máquina cliente y la máquina servidor.
+					</p>
+					<img src="../conec2.png"/>
+				</section>
+				<section>
+					<table>
+						<thead>
+							<tr>
+								<th>Máquina</th>
+								<th>IP</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Víctima</td>
+								<td>10.0.2.6</td>
+							</tr>
+							<tr>
+								<td>Servidor</td>
+								<td>10.0.2.12</td>
+							</tr>
+							<tr>
+								<td>Atacante</td>
+								<td>10.0.2.5</td>
+							</tr>
+							<tr>
+								<td>Gateaway</td>
+								<td>10.0.2.1</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				<section>
+					<h2>Preparando la máquina atacante</h2>
+					En la máquina atacante introducimos los siguientes comandos:
+<pre><code data-trim>
+# echo 1 > /proc/sys/net/ipv4/ip_forward
+</code></pre>
+<pre><code data-trim>
+# arpspoof -i eth1 -t 10.0.2.6 10.0.2.1
+</code></pre>
+<pre><code data-trim>
+# dnsspoof -i eth1 -f dns.txt src 10.0.2.6
+</code></pre>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
