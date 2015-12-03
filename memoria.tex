@@ -365,7 +365,7 @@ Para atacar a nuestra víctima, tenemos que realizar los siguientes pasos:
     \item Para empezar, lo que tenemos que hacer es redirigir el tráfico de la víctima a nuestro $Gateaway$\footnote{Para ver la dirección IP del Gateaway tenemos que escribir en nuestra terminal la orden \texttt{arp -a}.}, creando, por así decirlo, el escenario del MITM. Con esto, seremos capaces de leer todo el tráfico que entra y sale de la máquina de la víctima, ya que pasa por nuestra puerta de salida. Para ello, hacemos uso del comando \texttt{aprspoof} como se muestra a continuación:
 
 \begin{minted}[frame=single, label={Redirigiendo el tráfico con \texttt{arpspoof}}]{console}
-# sudo arpspoof -i eth1 -t 10.0.2.6 10.0.2.1
+# arpspoof -i eth1 -t 10.0.2.6 10.0.2.1
 \end{minted}
 
     La opción $-i$ indica la interfaz de red, $-t$ indica el $target$ u objetivo, es decir, a quién le vamos a redirigir el tráfico y la última dirección $IP$ indica la dirección $IP$ del $Gateaway$. La ejecución del esta línea, proporcionará una salida como la que se muestra en la \hyperref[ataque1]{Figura \ref*{ataque1}}.
@@ -386,9 +386,9 @@ Para atacar a nuestra víctima, tenemos que realizar los siguientes pasos:
             \caption{Creación del fichero ``\textit{dns.txt}''.}
             \label{ataque2}
         \end{figure}
-        \item Una vez hecho esto, ya podemos empezar a escuchar las peticiones DNS con \texttt{dnsspoof}. Para ello, ejecutaremos la siguiente orden:
+        \item Una vez hecho esto, ya podemos empezar a escuchar las peticiones DNS con \texttt{dnsspoof}. Para ello, ejecutaremos la siguiente orden:\\
 \begin{minted}[frame=single, label={Escuchando las peticiones DNS con \texttt{dnsspoof}}]{console}
-# sudo dnsspoof -i eth1 -f dns.txt src 10.0.2.6
+# dnsspoof -i eth1 -f dns.txt src 10.0.2.6
 \end{minted}
 
     En este caso, $-i$ vuelve a indicar la interfaz de red. La opción $-f$ indica el fichero de donde se leerán las $IP's$ y los nombres de dominio asociados y $src$ indica de dónde se leeran estas peticiones, es decir, de qué $IP$ vendrán las peticiones DNS. En este caso, de la víctima, cuya dirección IP la podemos ver en la \hyperref[maquinas]{Tabla \ref*{maquinas}}. La ejecución de esta orden tiene una salida como la que se muestra en la \hyperref[ataque3]{Figura \ref*{ataque3}}.
