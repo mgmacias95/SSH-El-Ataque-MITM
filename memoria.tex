@@ -402,7 +402,8 @@ Para atacar a nuestra víctima, tenemos que realizar los siguientes pasos:
 
     \end{enumerate}
     
-    \item El siguiente paso es escuchar el tráfico que genere el protocolo SSH para obtener el usuario y contraseña de inicio de sesión de la máquina de la víctima. Para ello haremos uso de la herramienta \texttt{sshmitm}, capaz de realizar esto. Esta herramienta, como podemos ver en \cite{sshmitm}, dispone de la opción $-I$, que nos sirve para, aparte de realizar la escucha de la sesión ssh, nos permite conectarnos de forma interactiva y obtener datos sensibles.
+    \label{mitm_i}
+    \item El siguiente paso es escuchar el tráfico que genere el protocolo SSH para obtener el usuario y contraseña de inicio de sesión de la máquina de la víctima. Para ello haremos uso de la herramienta \texttt{sshmitm}, capaz de realizar esto. Esta herramienta, como podemos ver en  \cite{sshmitm}, dispone de la opción $-I$, que nos sirve para, aparte de realizar la escucha de la sesión ssh, nos permite conectarnos de forma interactiva y obtener datos sensibles.
 
     La ejecución de esta orden sin la opción $-I$, la podemos ver en la \hyperref[ataque4]{Figura \ref*{ataque4}}.
 
@@ -415,10 +416,35 @@ Para atacar a nuestra víctima, tenemos que realizar los siguientes pasos:
 
     Una vez hecho esto, ya estamos preparados para atacar a la víctima.
 
-    \item Cuando la víctima realice la conexión SSH usando el protocolo 1, obtendrá una salida por pantalla como la que se muestra en la \hyperref[ataque5]{Figura \ref*{ataque5}}. Al ser la primera conexión, 
+    \item Cuando la víctima realice la conexión SSH usando el protocolo 1, obtendrá una salida por su terminal como la que se muestra en la \hyperref[ataque5]{Figura \ref*{ataque5}}. 
+
+    \begin{figure}[!h]
+        \centering
+        \includegraphics[width=0.75\textwidth]{ataque5}
+        \caption{Salida por terminal al hacer la primera conexión SSH.}
+        \label{ataque5}
+    \end{figure}
+
+    Al ser la primera conexión, nos avisará de que no puede identificar la identidad del servidor y nos muestra su $fingerprint$, para ver si de verdad queremos continuar con la conexión. Nuestra ingenua víctima, acepta la conexión ya que no sospecha nada de que está siendo atacada e introduce su usuario y contraseña para el inicio de la conexión SSH de la víctima, como se ve en la \hyperref[ataque6]{Figura \ref*{ataque6}}.
+
+    \begin{figure}[!h]
+        \centering
+        \includegraphics[width=0.75\textwidth]{ataque6}
+        \caption{Salida por terminal que obtiene el atacante tras el inicio de sesión de la víctima usando \texttt{sshmitm} sin la opción $-I$. En ella podemos ver arriba el momento de la conexión, qué $IP$ realizó la conexión y debajo, el usuario y su contraseña.}
+        \label{ataque6}
+    \end{figure}
 
 \end{enumerate}
 
+    Así podemos ver cómo se puede violar la seguridad del protocolo $SSH-1$, pero aun así, puede que la información no esté comprometida.
+
+\subsubsection{Un paso más allá: la sesión monitorizada.}
+
+Como se mencionó antes, \texttt{sshmitm} dispone de la opción $-I$. Esta opción, como se dice en \cite{sshmitm}, nos sirve para monitorizar o \textbf{\textit{piratear}} una sesión. Con esta opción, si el ataque tiene éxito, el atacante podrá navegar a sus anchas durante la sesión SSH, sin que la víctima sepa lo que está pasando. 
+
+A continuación, vamos a demostrar cómo con una sesión interactiva podemos obtener datos sensibles, como pueden ser la clave privada del servidor, u otros datos sensibles.
+
+Para ello, realizamos los mismos pasos que en el ataque anterior, pero la 
 
 \bibliography{memoria} 
 \bibliographystyle{siam}
