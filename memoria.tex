@@ -451,8 +451,31 @@ Como se mencionó antes, \texttt{sshmitm} dispone de la opción $-I$. Esta opci�
 A continuación, vamos a demostrar cómo con una sesión interactiva podemos obtener datos sensibles, como pueden ser la clave privada del servidor, u otros datos sensibles.
 
 Para ello, realizamos los mismos pasos que en el ataque anterior, pero para escuchar el tráfico del protocolo SSH, en este caso usaremos la siguiente orden:
+\begin{minted}[frame=single, label={Iniciando \texttt{sshmitm} para monitorizar la sesión}]{console}
+# sshmitm -I -p22 10.0.2.16 
+\end{minted}
 
-sshmitm -I -p22 10.0.2.16 
+La salida del comando es igual a la que podemos ver en \hyperref[ataque4]{Figura \ref*{ataque4}}. Pero, una vez que la víctima se conecta por primera vez y nuestro ataque tiene éxito, la salida por pantalla, ya no es la misma que la que podíamos ver en la \hyperref[ataque6]{Figura \ref*{ataque6}}, sino que cambia completamente, tal y como podemos ver en la \hyperref[ataque7]{Figura \ref*{ataque7}}.
+
+\begin{figure}[!h]
+        \centering
+        \includegraphics[width=0.65\textwidth]{ataque7}
+        \caption{Salida por terminal que obtiene el atacante tras el inicio de sesión de la víctima usando \texttt{sshmitm} con la opción $-I$. En ella podemos ver el mensaje de ``$connection hijacked$'' o conexión pirateada.}
+        \label{ataque7}
+\end{figure}
+
+Al tener éxito, podemos introducir comandos e interactuar con la sesión como si fueramos la víctima quien realiza los comandos. En el caso de la \hyperref[ataque7]{Figura \ref*{ataque7}} podemos ver cómo podemos realizar un \texttt{ls -la} para ver el listado de archivos del servidor.
+
+Si se da esta situación, la pérdida o el filtrado de información sensible sí que es un peligro, ya que el atacante puede moverse a través del servidor, como si de una persona autorizada se tratase y tener acceso a archivos privados o información no pública, que compromete la privacidad y seguridad de la información y personas relacionadas al servidor. Para ver un ejemplo sencillo, vamos a obtener la clave \textbf{privada} del servidor, como ejemplo de información sensible que podemos obtener, tal y como podemos ver en la \hyperref[ataque8]{Figura \ref*{ataque8}}.
+
+\begin{figure}[H]
+        \centering
+        \includegraphics[width=0.65\textwidth]{ataque8}
+        \caption{Obtención de la clave privada del servidor SSH mediante el uso de la \texttt{sshmitm -I}.}
+        \label{ataque8}
+\end{figure}
+
+En la \hyperref[ataque8]{Figura \ref*{ataque8}}, podemos ver cómo nos podemos mover en el servidor. En este caso, accedemos al directorio $/etc/ssh$ donde están los archivos de configuración tanto del cliente como del servidor $SSH$
 
 \bibliography{memoria} 
 \bibliographystyle{siam}
