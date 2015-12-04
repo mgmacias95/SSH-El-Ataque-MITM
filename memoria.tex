@@ -405,6 +405,8 @@ Para atacar a nuestra víctima, tenemos que realizar los siguientes pasos:
     \label{mitm_i}
     \item El siguiente paso es escuchar el tráfico que genere el protocolo SSH para obtener el usuario y contraseña de inicio de sesión de la máquina de la víctima. Para ello haremos uso de la herramienta \texttt{sshmitm}, capaz de realizar esto. Esta herramienta, como podemos ver en  \cite{sshmitm}, dispone de la opción $-I$, que nos sirve para, aparte de realizar la escucha de la sesión ssh, nos permite conectarnos de forma interactiva y obtener datos sensibles.
 
+    En este caso introduciremos el siguente 
+
     La ejecución de esta orden sin la opción $-I$, la podemos ver en la \hyperref[ataque4]{Figura \ref*{ataque4}}.
 
     \begin{figure}[!h]
@@ -444,7 +446,9 @@ Como se mencionó antes, \texttt{sshmitm} dispone de la opción $-I$. Esta opci�
 
 A continuación, vamos a demostrar cómo con una sesión interactiva podemos obtener datos sensibles, como pueden ser la clave privada del servidor, u otros datos sensibles.
 
-Para ello, realizamos los mismos pasos que en el ataque anterior, pero la 
+Para ello, realizamos los mismos pasos que en el ataque anterior, pero para escuchar el tráfico del protocolo SSH, en este caso usaremos la siguiente orden:
+
+sshmitm -I -p22 10.0.2.16 
 
 \bibliography{memoria} 
 \bibliographystyle{siam}
