@@ -475,7 +475,13 @@ Si se da esta situación, la pérdida o el filtrado de información sensible sí
         \label{ataque8}
 \end{figure}
 
-En la \hyperref[ataque8]{Figura \ref*{ataque8}}, podemos ver cómo nos podemos mover en el servidor. En este caso, accedemos al directorio $/etc/ssh$ donde están los archivos de configuración tanto del cliente como del servidor $SSH$
+En la \hyperref[ataque8]{Figura \ref*{ataque8}}, podemos ver cómo nos podemos mover en el servidor. En este caso, accedemos al directorio $/etc/ssh$ donde están los archivos de configuración tanto del cliente como del servidor $SSH$ (\cite{sshd}). Una vez aquí, vamos a mostrar la clave privada.
+
+Para ello, intentamos hacer un \texttt{cat ssh\_host\_rsa\_key}, que nos denegará por no tener los permisos necesarios para ejecutarlo. Para ello, usaremos la orden sudo junto con la orden anterior.
+
+Tras esto, se enviará la orden, pero SSH intentará reconocer el nombre del host. Como no podrá hacerlo, nos pedirá que introduzcamos la contraseña. Al igual que la primera versión del ataque que realizamos, la opción $-I$ también nos dará el nombre de usuario y contraseña, con lo que podemos tener acceso a la clave privada del servidor, tal y como se ve en la \hyperref[ataque8]{Figura \ref*{ataque8}}.
+
+Así queda demostrado que un ataque $Man-in-the-middle$ puede suponer un gran riesgo para la seguridad y confidencialidad de los datos del servidor y de los clientes asociados a este servidor, ya que no solo podemos obtener usuarios y contraseñas, si no que podemos hacer uso de una sesión interactiva y provocar un verdadero daño al servidor.
 
 \bibliography{memoria} 
 \bibliographystyle{siam}
