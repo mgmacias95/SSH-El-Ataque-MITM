@@ -53,24 +53,12 @@
 				<section>
 					<h2>Comparación con <strong>Telnet</strong></h2>
 					<p>Telnet nos ofrece una funcionalidad muy parecida a SSH, pero, ¿cuál es la diferencia?</p>
-				</section>
-				<section>
-					<h2>Seguridad</h2>
-					<p>A diferencia de SSH, Telnet envía toda la comunicación en texto plano a través de la red.</p>
-					<p>Si alguien consigue interceptar nuestra comunicación podrá obtener nuestra contraseña de acceso al servidor.</p>
-				</section>
-				<section>
-					<img src="../telnet1.png">
+					<p class="fragment">A diferencia de SSH, Telnet envía toda la comunicación en texto plano a través de la red.</p>
+					<p class="fragment">Si alguien consigue interceptar nuestra comunicación podrá obtener nuestra contraseña de acceso al servidor.</p>
+					<p class="fragment">En cambio, en SSH, si conseguimos interceptar la comunicación, veremos texto encriptado, por lo que no podremos obtener ninguna información.</p>
 				</section>
 				<section>
 					<img src="../telnet2.png">
-				</section>
-				<section>
-					<p>Como se ve, hemos conseguido interceptar toda la comunicación Telnet, incluídos el usuario y contraseña de acceso.</p>
-				</section>
-				<section>
-					<p>En cambio, en SSH, si conseguimos interceptar la comunicación, veremos texto encriptado, por lo que no podremos obtener ninguna información.</p>
-					<p>Sin embargo, nada es perfecto...</p>
 				</section>
 				<section>
 					<img src="../ssh2.png"/>
@@ -89,6 +77,7 @@
 					<h2>¿Qué es Man-In-The-Middle?</h2>
 					Es un ataque a través del cual conseguimos que el emisor de la comunicación nos envíe a nosotros todas las peticiones pensando que las está enviando al servidor. Nosotros después reenviamos dichas peticiones al servidor, haciendo de intermediario entre ambos.
 				</p>
+				<h2>¿Cómo afecta a SSH?</h2>
 				<p>
 					En la primera conexión SSH, no se comprueba el servidor al que se está realizando la conexión, por lo que podríamos, por error, conectarnos al servidor equivocado. Esta vulnerabilidad es aprovechada por este ataque.
 				</p>
@@ -111,35 +100,37 @@
 					<p>
 						La idea es convertir nuestra máquina atacante en un router por donde pasará todo el tráfico de la máquina cliente y la máquina servidor.
 					</p>
-					<img src="../conec2.png"/>
-				</section>
-				<section data-background="#4d7e65" data-background-transition="zoom">
-					<table>
-						<thead>
-							<tr>
-								<th>Máquina</th>
-								<th>IP</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Víctima</td>
-								<td>10.0.2.6</td>
-							</tr>
-							<tr>
-								<td>Servidor</td>
-								<td>10.0.2.12</td>
-							</tr>
-							<tr>
-								<td>Atacante</td>
-								<td>10.0.2.5</td>
-							</tr>
-							<tr>
-								<td>Gateaway</td>
-								<td>10.0.2.1</td>
-							</tr>
-						</tbody>
-					</table>
+					<div id="esquema" style="float:left">
+						<img src="../conec2.png"/>
+					</div>
+					<div id="tabla" style="float:right">
+						<table>
+							<thead>
+								<tr>
+									<th>Máquina</th>
+									<th>IP</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Víctima</td>
+									<td>10.0.2.6</td>
+								</tr>
+								<tr>
+									<td>Servidor</td>
+									<td>10.0.2.16</td>
+								</tr>
+								<tr>
+									<td>Atacante</td>
+									<td>10.0.2.8</td>
+								</tr>
+								<tr>
+									<td>Gateaway</td>
+									<td>10.0.2.1</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</section>
 				<section data-background="#4d7e65" data-background-transition="zoom">
 					<h2>Preparando la máquina atacante</h2>
@@ -166,12 +157,12 @@
 					<img src="../ataque6.png" />
 					</p>
 				</section>
-				<section data-background="#4d7e65" data-background-transition="zoom">
+<!-- 				<section data-background="#4d7e65" data-background-transition="zoom">
 					<h2>Sesiones interactivas</h2>
 					<p>Pero no sólo podemos obtener el usuario y la contraseña, si usamos la opción -I de sshmitm, podremos además controlar la terminal del servidor desde la nuestra.
 					<img src="../ataque7.png" />
 					</p>
-				</section>
+				</section> -->
 				<section>
 					<h2>¿Cómo evitarlo?</h2>
 					<p>Podemos evitar conectarnos al servidor que no debemos comprobando su fingerprint.
