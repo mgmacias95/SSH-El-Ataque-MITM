@@ -492,6 +492,8 @@ En el lado del servidor, hay varios parámetros del fichero \textit{sshd\_config
     \item \textbf{PasswordAuthentication}: este parámetro establece si se permite o no acceder al servidor mediante contraseña. El valor por defecto es que sí, pero como se ha visto, ésta puede ser interceptada. Por tanto, es mejor obligar a los usuarios a que accedan con una clave pública al servidor.
 \end{enumerate}
 
+Por parte del administrador del servidor, para garantizar aún más que los clientes se conecten a él y evitar un ataque $MITM$, es recomendable usar un certificado digital, acreditado por una entidad certificadora con cierto prestigio, como se dice en \cite{ca}, para garantizar los clientes que se quieran conectar a nuestro servidor tengan la seguridad de que nuestra clave pública es la verdadera o hacer uso de herramientas como \texttt{scp}, en las cuales podemos establecer un canal seguro de comunicación para enviar nuestra clave a un cliente, como podemos ver en \cite{scp}.
+
 \bibliography{memoria} 
 \bibliographystyle{siam}
 
