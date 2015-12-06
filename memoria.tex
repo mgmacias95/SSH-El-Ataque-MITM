@@ -116,7 +116,7 @@
 \subsubsection*{Resumen}
 % {\small SSH presume de ser un protocolo para la comunicación entre dos máquinas seguro, ya que encripta todo lo que se envía a la otra máquina. Sin embargo, tiene un punto débil: el ataque conocido como \textit{Man-in-the-middle}. En este trabajo se estudia a fondo en qué consiste dicho ataque, cómo afecta a SSH y cómo evitarlo. Además, también se reproducirá un ataque \textit{Man-in-the-middle} en máquinas virtuales para poder obtener las credenciales de acceso a un servidor de un usuario.}
 \begin{minipage}{0.7\textwidth}
-{\small SSH presume de ser un protocolo para la comunicación entre dos máquinas seguro, ya que encripta todo lo que se envía a la otra máquina. Sin embargo, tiene un punto débil: el ataque conocido como \textit{Man-in-the-middle}. En este trabajo se estudia a fondo en qué consiste dicho ataque, cómo afecta a SSH y cómo evitarlo. Además, también se reproducirá un ataque \textit{Man-in-the-middle} en máquinas virtuales para poder obtener las credenciales de acceso a un servidor de un usuario.}
+{\small SSH presume de ser un protocolo para la comunicación entre dos máquinas seguro, ya que encripta todo lo que se envía a la otra máquina. Sin embargo, tiene un punto débil: el ataque conocido como \textit{Man-in-the-middle}. En este trabajo se estudia en qué consiste dicho ataque, cómo afecta a SSH y cómo evitarlo. Además, también se reproducirá un ataque \textit{Man-in-the-middle} en máquinas virtuales para poder obtener las credenciales de acceso a un servidor de un usuario.}
 \end{minipage}
 \end{center}
 
@@ -209,62 +209,13 @@ Esto se debe, según \cite{valenciano}, a que en el archivo de configuración de
 
 Su funcionamiento, de forma muy básica, consiste en que nuestro cliente le pide al servidor su clave pública ($rsa$), y este responde con ella. El atacante le envía un mensaje ``falsificado'' al cliente con la información procedente del servidor haciéndole creer que le llega desde este último. Entonces, el cliente encripta el mensaje y se lo devuelve a lo que cree que es el servidor. Con esto, el atacante consigue las claves necesarias para acceder con los datos del cliente al servidor.
 
-% Según se explica en \cite{mitmdef}, el atacante se queda en medio de una comunicación, haciendo creer a cada una de las partes que están comunicandose directamente en una conexión privada.
-
 \subsection{¿Cómo afecta \textit{Man-in-the-middle} a SSH?}
 Tal y como se explica en \cite{valenciano}, el ataque \textit{Man-in-the-middle} se puede dar en SSH en esa primera conexión descrita en la \hyperref[intro]{Seción \ref*{intro} (Introducción)}, porque es cuando SSH se conecta a un servidor sin comprobar su identidad, ya que no conocemos si el servidor al que vamos a realizar la conexión y pedir la clave, es de confianza o no, pudiendo realizar la conexión a la máquina atacante, que filtre las peticiones y capturando las claves públicas, entre otros datos de valor. 
 
 En cambio, una vez guardada la clave pública de una máquina en el archivo de \textit{known hosts}, aunque alguien consiguiera asignar la IP de dicha máquina a otra, SSH detectaría que no es la misma máquina y el ataque \textit{Man-in-the-middle} quedaría bloqueado.
 
-\subsection{¿Cómo evitar un ataque \textit{Man-in-the-middle} en SSH?}
-Tal y como se explicó en la sección \hyperref[intro]{Seción \ref*{intro} (Introducción)}, el parámetro \textbf{StrictHostKeyChecking} tiene por defecto el valor \textbf{ask}. Sin embargo, lo que no se especificó en dicha sección es que además de ese valor también puede tomar los valores \textbf{yes} y \textbf{no}. Tal y como se explica en \cite{valenciano}, si tenemos configurado el valor \textbf{no} SSH no se conectará con ningún servidor SSH que no figure en su lista de \textit{known host}, en cambio, si tenemos configurado el valor \textbf{yes} hará todo lo contrario: se conectará a cualquier servidor sin preguntar.
 
-Con dicho parámetro establecido al valor \textbf{ask}, cada vez que nos conectemos a un servidor que no figure en la lista de \textit{known hosts} SSH nos mostará su \textit{fingerprint}, ésto es su identificador (\hyperref[fingerprint]{Figura \ref*{fingerprint}}). 
-
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=0.7\textwidth]{fingerprint}
-    \caption{\textit{fingerprint} del servidor al que nos estamos conectando}
-    \label{fingerprint}
-\end{figure}
-
-Nuestro trabajo ahora sería, según \cite{valenciano}, comparar dicho identificador con el identificador que nos han debido de dar al proporcionarnos nuestro usuario y contraseña, pero ¿y si es un servidor SSH administrado por nosotros? ¿cómo podemos saber su \textit{fingerprint} entonces? Según \cite{sshd}, el parámetro \textbf{HostKey} del fichero \textit{/etc/ssh/sshd\_config} contiene la ruta de los ficheros que contienen las claves públicas y privadas de nuestro servidor. Para ver su valor, según la sección \textit{Verifying Host Keys} de \cite{manssh}, debemos ejecutar el siguiente comando:
-
-\begin{minted}[frame=single, label={Obteniendo el \textit{fingerprint} de nuestro servidor}]{bash}
-sudo ssh-keygen -lf /etc/ssh/ssh_host_ecdsa_key
-\end{minted}
-
-Así, tal y como se ve en la \hyperref[clave]{Figura \ref*{clave}} obtenemos el mismo identificador que el servidor nos muestra al conectarnos por primera vez (\hyperref[fingerprint]{Figura \ref*{fingerprint}}).
-
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=0.7\textwidth]{clave}
-    \caption{Obteniendo el \textit{fingerprint} de nuestro servidor}
-    \label{clave}
-\end{figure}
-
-Ahora bien, comparar carácter a carácter puede ser algo tedioso por lo que podemos hacerlo de un modo algo más gráfico asignando el valor \textbf{yes} al parámetro \textbf{VisualHostKey} del fichero \textit{/etc/ssh/ssh\_config} de nuestro cliente SSH. Así, al conectarnos a un servidor SSH por primera vez veremos el ``dibujo'' de la \hyperref[visualhostkey]{Figura \ref*{visualhostkey}}.
-
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=0.7\textwidth]{visualhostkey}
-    \caption{Mensaje que obtenemos al conectarnos por primera vez a un determinado servidor SSH con el parámetro \textbf{VisualHostKey} activado}
-    \label{visualhostkey}
-\end{figure}
-
-Para obtener el ``dibujo'' que genera nuestro servidor ejecutamos el siguiente comando:
-\begin{minted}[frame=single, label={Obteniendo el ``dibujo'' de nuestro servidor}]{bash}
-sudo ssh-keygen -lvf /etc/ssh/ssh_host_ecdsa_key
-\end{minted}
-
-Al ejecutar dicho comando obtendremos el output de la \hyperref[visualhostkey1]{Figura \ref*{visualhostkey1}}, que coincide con el obtenido al intentar conectarnos por primera vez en la \hyperref[visualhostkey]{Figura \ref*{visualhostkey}}.
-
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=0.7\textwidth]{comprobacion_visualkey}
-    \caption{Obteniendo el ``dibujo'' generado por nuestro servidor.}
-    \label{visualhostkey1}
-\end{figure}
+% Según se explica en \cite{mitmdef}, el atacante se queda en medio de una comunicación, haciendo creer a cada una de las partes que están comunicandose directamente en una conexión privada.
 
 % <<<<<<< HEAD
 % \subsection{El ataque a la primera conexión}
@@ -357,7 +308,7 @@ Para realizar el ataque, tenemos tres máquinas y el \textit{Gateaway}, cada una
     \label{maquinas}
 \end{table}
 
-\subsection{Realizando el ataque}
+\subsubsection{Realizando el ataque}
 
 Para atacar a nuestra víctima, tenemos que realizar los siguientes pasos:
 
@@ -482,6 +433,64 @@ Para ello, intentamos hacer un \texttt{cat ssh\_host\_rsa\_key}, que nos denegar
 Tras esto, se enviará la orden, pero SSH intentará reconocer el nombre del host. Como no podrá hacerlo, nos pedirá que introduzcamos la contraseña. Al igual que la primera versión del ataque que realizamos, la opción $-I$ también nos dará el nombre de usuario y contraseña, con lo que podemos tener acceso a la clave privada del servidor, tal y como se ve en la \hyperref[ataque8]{Figura \ref*{ataque8}}.
 
 Así queda demostrado que un ataque $Man-in-the-middle$ puede suponer un gran riesgo para la seguridad y confidencialidad de los datos del servidor y de los clientes asociados a este servidor, ya que no solo podemos obtener usuarios y contraseñas, si no que podemos hacer uso de una sesión interactiva y provocar un verdadero daño al servidor.
+
+\subsection{¿Cómo evitar un ataque \textit{Man-in-the-middle} en SSH?}
+\subsubsection{En el cliente}
+Tal y como se explicó en la sección \hyperref[intro]{Seción \ref*{intro} (Introducción)}, el parámetro \textbf{StrictHostKeyChecking} tiene por defecto el valor \textbf{ask}. Sin embargo, lo que no se especificó en dicha sección es que además de ese valor también puede tomar los valores \textbf{yes} y \textbf{no}. Tal y como se explica en \cite{sshconf}, si tenemos configurado el valor \textbf{yes} SSH no se conectará con ningún servidor SSH que no figure en su lista de \textit{known host}, en cambio, si tenemos configurado el valor \textbf{no} hará todo lo contrario: añadirá el \textit{host key} de cada nuevo servidor al que nos conectamos al fichero de \textit{known hosts}.
+
+Con dicho parámetro establecido al valor \textbf{ask}, cada vez que nos conectemos a un servidor que no figure en la lista de \textit{known hosts} SSH nos mostará su \textit{fingerprint}, ésto es su identificador (\hyperref[fingerprint]{Figura \ref*{fingerprint}}). 
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{fingerprint}
+    \caption{\textit{fingerprint} del servidor al que nos estamos conectando}
+    \label{fingerprint}
+\end{figure}
+
+Nuestro trabajo ahora sería, según \cite{valenciano}, comparar dicho identificador con el identificador que nos han debido de dar al proporcionarnos nuestro usuario y contraseña, pero ¿y si es un servidor SSH administrado por nosotros? ¿cómo podemos saber su \textit{fingerprint} entonces? Según \cite{sshd}, el parámetro \textbf{HostKey} del fichero \textit{/etc/ssh/sshd\_config} contiene la ruta de los ficheros que contienen las claves públicas y privadas de nuestro servidor. Para ver su valor, según la sección \textit{Verifying Host Keys} de \cite{manssh}, debemos ejecutar el siguiente comando:
+
+\begin{minted}[frame=single, label={Obteniendo el \textit{fingerprint} de nuestro servidor}]{bash}
+sudo ssh-keygen -lf /etc/ssh/ssh_host_ecdsa_key
+\end{minted}
+
+Así, tal y como se ve en la \hyperref[clave]{Figura \ref*{clave}} obtenemos el mismo identificador que el servidor nos muestra al conectarnos por primera vez (\hyperref[fingerprint]{Figura \ref*{fingerprint}}).
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{clave}
+    \caption{Obteniendo el \textit{fingerprint} de nuestro servidor}
+    \label{clave}
+\end{figure}
+
+Ahora bien, comparar carácter a carácter puede ser algo tedioso por lo que podemos hacerlo de un modo algo más gráfico asignando el valor \textbf{yes} al parámetro \textbf{VisualHostKey} del fichero \textit{/etc/ssh/ssh\_config} de nuestro cliente SSH. Así, al conectarnos a un servidor SSH por primera vez veremos el ``dibujo'' de la \hyperref[visualhostkey]{Figura \ref*{visualhostkey}}.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{visualhostkey}
+    \caption{Mensaje que obtenemos al conectarnos por primera vez a un determinado servidor SSH con el parámetro \textbf{VisualHostKey} activado}
+    \label{visualhostkey}
+\end{figure}
+
+Para obtener el ``dibujo'' que genera nuestro servidor ejecutamos el siguiente comando:
+\begin{minted}[frame=single, label={Obteniendo el ``dibujo'' de nuestro servidor}]{bash}
+sudo ssh-keygen -lvf /etc/ssh/ssh_host_ecdsa_key
+\end{minted}
+
+Al ejecutar dicho comando obtendremos el output de la \hyperref[visualhostkey1]{Figura \ref*{visualhostkey1}}, que coincide con el obtenido al intentar conectarnos por primera vez en la \hyperref[visualhostkey]{Figura \ref*{visualhostkey}}.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{comprobacion_visualkey}
+    \caption{Obteniendo el ``dibujo'' generado por nuestro servidor.}
+    \label{visualhostkey1}
+\end{figure}
+
+\subsubsection{En el servidor}
+En el lado del servidor, hay varios parámetros del fichero \textit{sshd\_config} que podemos modificar para aumentar la seguridad de nuestro servidor:
+\begin{enumerate}[$\bullet$]
+    \item \textbf{Protocol}: este parámetro establece qué protocolos de SSH permite utilizar el servidor. Debemos establecer dicho parámetro al valor \textbf{2} para obligar a que todos los clientes se conecten usando la versión 2 del protocolo.
+    \item \textbf{PasswordAuthentication}: este parámetro establece si se permite o no acceder al servidor mediante contraseña. El valor por defecto es que sí, pero como se ha visto, ésta puede ser interceptada. Por tanto, es mejor obligar a los usuarios a que accedan con una clave pública al servidor.
+\end{enumerate}
 
 \bibliography{memoria} 
 \bibliographystyle{siam}

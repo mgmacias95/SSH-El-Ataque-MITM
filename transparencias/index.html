@@ -93,31 +93,6 @@
 					En la primera conexión SSH, no se comprueba el servidor al que se está realizando la conexión, por lo que podríamos, por error, conectarnos al servidor equivocado. Esta vulnerabilidad es aprovechada por este ataque.
 				</p>
 				</section>
-				<section>
-					<h2>¿Cómo evitarlo?</h2>
-					<p>Podemos evitar conectarnos al servidor que no debemos comprobando su fingerprint.
-					<img src="../fingerprint.png"/>
-					</p>
-					<p>Podemos comprobarlo de forma más visual activando el parámetro VisualHostKey en nuestro cliente
-					<img src="../visualhostkey.png"/>
-					</p>
-				</section>
-				<section>
-					<h2>¿Y cuál es el fingerprint de mi servidor SSH?</h2>
-					<p>
-						Podemos encontrar el fingerprint usando el siguiente comando:
-<pre><code data-trim>
-# ssh-keygen -lf /etc/ssh/ssh_host_ecdsa_key
-</code></pre>
-					</p>
-
-					<p>
-						Para obtener la VisualKey usamos el siguiente comando:
-<pre><code data-trim>
-# ssh-keygen -lvf /etc/ssh/ssh_host_ecdsa_key
-</code></pre>
-					</p>
-				</section>
 				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
 					<h2>Realizando un ataque </h2><h2> Man-In-The-Middle</h2>
 					<p>
@@ -195,6 +170,31 @@
 					<h2>Sesiones interactivas</h2>
 					<p>Pero no sólo podemos obtener el usuario y la contraseña, si usamos la opción -I de sshmitm, podremos además controlar la terminal del servidor desde la nuestra.
 					<img src="../ataque7.png" />
+					</p>
+				</section>
+				<section>
+					<h2>¿Cómo evitarlo?</h2>
+					<p>Podemos evitar conectarnos al servidor que no debemos comprobando su fingerprint.
+					<img src="../fingerprint.png"/>
+					</p>
+					<p>Podemos comprobarlo de forma más visual activando el parámetro VisualHostKey en nuestro cliente
+					<img src="../visualhostkey.png"/>
+					</p>
+				</section>
+				<section>
+					<h2>¿Y cuál es el fingerprint de mi servidor SSH?</h2>
+					<p>
+						Podemos encontrar el fingerprint usando el siguiente comando:
+<pre><code data-trim>
+# ssh-keygen -lf /etc/ssh/ssh_host_ecdsa_key
+</code></pre>
+					</p>
+
+					<p>
+						Para obtener la VisualKey usamos el siguiente comando:
+<pre><code data-trim>
+# ssh-keygen -lvf /etc/ssh/ssh_host_ecdsa_key
+</code></pre>
 					</p>
 				</section>
 				<section>
