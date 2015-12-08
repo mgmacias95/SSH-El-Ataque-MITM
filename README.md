@@ -1,4 +1,4 @@
-# Seguridad-y-uso-de-SSH
-Trabajo final de la asignatura Ingeniería de Servidores sobre la seguridad y el uso de SSH en servidores.
+# SSH-El-Ataque-MITM
+Trabajo final de la asignatura Ingeniería de Servidores sobre sobre el ataque Man-In-The-Middle en SSH.
 
 Transparencias hechas usando [reveal.js](http://lab.hakim.se/reveal-js/#/ "reveal.js").
