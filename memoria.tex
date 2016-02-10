@@ -260,13 +260,13 @@ Para relizar el ataque necesitaremos tres máquinas: una \textbf{víctima} que s
 
 \subsubsection{Bases para realizar el ataque}
 
-Para realizar un ataque satisfactorio y comprometer la seguridad del protocolo SSH al realizar la primera conexión, tenemos que hacer creer a la víctima y al servidor que su $Gateaway$ es en realidad nuestra máquina atacante (\hyperref[conec2]{Figura \ref*{conec2}}) y no el que lo conecta directamente con el servidor (\hyperref[conec1]{Figura \ref*{conec1}}). Es decir, que todo el flujo de datos que hay entre ellos durante la comunicación, pase a través de nuestra máquina, para ser capaz de realizar la escucha y extracción de datos.
+Para realizar un ataque satisfactorio y comprometer la seguridad del protocolo SSH al realizar la primera conexión, tenemos que hacer creer a la víctima y al servidor que su $Gateway$ es en realidad nuestra máquina atacante (\hyperref[conec2]{Figura \ref*{conec2}}) y no el que lo conecta directamente con el servidor (\hyperref[conec1]{Figura \ref*{conec1}}). Es decir, que todo el flujo de datos que hay entre ellos durante la comunicación, pase a través de nuestra máquina, para ser capaz de realizar la escucha y extracción de datos.
 
 \begin{figure}[H]
     \centering
     
     \mbox {
-        \subfigure[Conexión ``normal'' del cliente a través del Gateaway con el servidor.]{
+        \subfigure[Conexión ``normal'' del cliente a través del Gateway con el servidor.]{
         \includegraphics[width=0.5\textwidth]{conec1}
         \label{conec1}
     }
@@ -281,7 +281,7 @@ Para realizar un ataque satisfactorio y comprometer la seguridad del protocolo S
     \label{conexiones}
 \end{figure}
 
-Para realizar el ataque, tenemos tres máquinas y el \textit{Gateaway}, cada una con su dirección IP, como se muestra en la \hyperref[maquinas]{Tabla \ref*{maquinas}}, y lo que haremos será redirigir el tráfico de red a nuestra máquina atacante y realizar las escuchas con el conjunto de herramientas mencionadas anteriormente y usando el protocolo SSH-1.
+Para realizar el ataque, tenemos tres máquinas y el \textit{Gateway}, cada una con su dirección IP, como se muestra en la \hyperref[maquinas]{Tabla \ref*{maquinas}}, y lo que haremos será redirigir el tráfico de red a nuestra máquina atacante y realizar las escuchas con el conjunto de herramientas mencionadas anteriormente y usando el protocolo SSH-1.
 
 \begin{description}
     \item [aprspoof]: Redirige el tráfico de red de una máquina a otra, siempre que sea en una red LAN, o de un conjunto de máquinas a otra, como se indica en \cite{arpspoof}.
@@ -299,7 +299,7 @@ Para realizar el ataque, tenemos tres máquinas y el \textit{Gateaway}, cada una
     \hline
     Atacante & 10.0.2.8 \\
     \hline
-    Gateaway & 10.0.2.1 \\
+    Gateway & 10.0.2.1 \\
     \hline
     Servidor & 10.0.2.16 \\
     \hline
@@ -313,13 +313,13 @@ Para realizar el ataque, tenemos tres máquinas y el \textit{Gateaway}, cada una
 Para atacar a nuestra víctima, tenemos que realizar los siguientes pasos:
 
 \begin{enumerate}
-    \item Para empezar, lo que tenemos que hacer es redirigir el tráfico de la víctima a nuestro $Gateaway$\footnote{Para ver la dirección IP del Gateaway tenemos que escribir en nuestra terminal la orden \texttt{arp -a}.}, creando, por así decirlo, el escenario del MITM. Con esto, seremos capaces de leer todo el tráfico que entra y sale de la máquina de la víctima, ya que pasa por nuestra puerta de salida. Para ello, hacemos uso del comando \texttt{aprspoof} como se muestra a continuación:
+    \item Para empezar, lo que tenemos que hacer es redirigir el tráfico de la víctima a nuestro $Gateway$\footnote{Para ver la dirección IP del Gateway tenemos que escribir en nuestra terminal la orden \texttt{arp -a}.}, creando, por así decirlo, el escenario del MITM. Con esto, seremos capaces de leer todo el tráfico que entra y sale de la máquina de la víctima, ya que pasa por nuestra puerta de salida. Para ello, hacemos uso del comando \texttt{aprspoof} como se muestra a continuación:
 
 \begin{minted}[frame=single, label={Redirigiendo el tráfico con \texttt{arpspoof}}]{console}
 # arpspoof -i eth1 -t 10.0.2.6 10.0.2.1
 \end{minted}
 
-    La opción $-i$ indica la interfaz de red, $-t$ indica el $target$ u objetivo, es decir, a quién le vamos a redirigir el tráfico y la última dirección $IP$ indica la dirección $IP$ del $Gateaway$. La ejecución del esta línea, proporcionará una salida como la que se muestra en la \hyperref[ataque1]{Figura \ref*{ataque1}}.
+    La opción $-i$ indica la interfaz de red, $-t$ indica el $target$ u objetivo, es decir, a quién le vamos a redirigir el tráfico y la última dirección $IP$ indica la dirección $IP$ del $Gateway$. La ejecución del esta línea, proporcionará una salida como la que se muestra en la \hyperref[ataque1]{Figura \ref*{ataque1}}.
 
     \begin{figure}[!h]
         \centering
