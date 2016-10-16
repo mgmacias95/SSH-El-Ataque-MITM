@@ -58,19 +58,19 @@
 					<p class="fragment">En cambio, en SSH, si conseguimos interceptar la comunicación, veremos texto encriptado, por lo que no podremos obtener ninguna información.</p>
 				</section>
 				<section>
-					<img src="../telnet2.png">
+					<img src="telnet2.png">
 				</section>
 				<section>
-					<img src="../ssh2.png"/>
+					<img src="ssh2.png"/>
 				</section>
 				<section>
 					<h2>Vunerabilidad de SSH: la primera conexión.</h2>
 					<p>
 						Al conectarnos por primera vez en SSH, recibimos una alerta mostrándonos el siguiente mensaje:
 					</p>
-					<img src="../primeravezssh.png"/>
+					<img src="primeravezssh.png"/>
 					<p>Dicho mensaje significa que SSH no conoce el servidor al que nos estamos conectando, y nos pregunta a nosotros si queremos permitir la conexión. En caso de decir que sí veremos el siguiente mensaje:</p>
-					<img src="../knownhosts.png"/>
+					<img src="knownhosts.png"/>
 				</section>
 				<section>
 				<p>
@@ -101,7 +101,7 @@
 						La idea es convertir nuestra máquina atacante en un router por donde pasará todo el tráfico de la máquina cliente y la máquina servidor.
 					</p>
 					<div id="esquema" style="float:left">
-						<img src="../conec2.png"/>
+						<img src="conec2.png"/>
 					</div>
 					<div id="tabla" style="float:right">
 						<table>
@@ -152,24 +152,24 @@
 				</section>
 				<section data-background="#4d7e65" data-background-transition="zoom">
 					<p>Cuando la víctima se conecte verá el mensaje típico que se ve en la primera conexión:
-					<img src="../ataque5.png" /></p>
+					<img src="ataque5.png" /></p>
 					<p>Y nosotros veremos su contraseña y su usuario:
-					<img src="../ataque6.png" />
+					<img src="ataque6.png" />
 					</p>
 				</section>
 <!-- 				<section data-background="#4d7e65" data-background-transition="zoom">
 					<h2>Sesiones interactivas</h2>
 					<p>Pero no sólo podemos obtener el usuario y la contraseña, si usamos la opción -I de sshmitm, podremos además controlar la terminal del servidor desde la nuestra.
-					<img src="../ataque7.png" />
+					<img src="ataque7.png" />
 					</p>
 				</section> -->
 				<section>
 					<h2>¿Cómo evitarlo?</h2>
 					<p>Podemos evitar conectarnos al servidor que no debemos comprobando su fingerprint.
-					<img src="../fingerprint.png"/>
+					<img src="fingerprint.png"/>
 					</p>
 					<p>Podemos comprobarlo de forma más visual activando el parámetro VisualHostKey en nuestro cliente
-					<img src="../visualhostkey.png"/>
+					<img src="visualhostkey.png"/>
 					</p>
 				</section>
 				<section>
